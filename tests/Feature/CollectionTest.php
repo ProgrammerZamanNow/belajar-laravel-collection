@@ -175,5 +175,35 @@ class CollectionTest extends TestCase
 
     }
 
+    public function testFilter()
+    {
+        $collection = collect([
+            "Eko" => 100,
+            "Budi" => 80,
+            "Joko" => 90
+        ]);
+
+        $result = $collection->filter(function ($value, $key) {
+            return $value >= 90;
+        });
+
+        $this->assertEquals([
+            "Eko" => 100,
+            "Joko" => 90
+        ], $result->all());
+
+    }
+
+    public function testFilterIndex()
+    {
+        $collection = collect([1,2,3,4,5,6,7,8,9,10]);
+        $result = $collection->filter(function ($value, $key){
+            return $value % 2 == 0;
+        });
+
+        $this->assertEqualsCanonicalizing([2,4,6,8,10], $result->all());
+
+    }
+
 
 }
