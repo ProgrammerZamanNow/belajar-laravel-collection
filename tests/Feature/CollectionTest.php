@@ -59,7 +59,7 @@ class CollectionTest extends TestCase
             ["Khannedy", "Setiawan"]
         ]);
 
-        $result = $collection->mapSpread(function ($firstName, $lastName){
+        $result = $collection->mapSpread(function ($firstName, $lastName) {
             $fullName = $firstName . ' ' . $lastName;
             return new Person($fullName);
         });
@@ -102,24 +102,24 @@ class CollectionTest extends TestCase
 
     public function testZip()
     {
-        $collection1 = collect([1,2,3]);
-        $collection2 = collect([4,5,6]);
+        $collection1 = collect([1, 2, 3]);
+        $collection2 = collect([4, 5, 6]);
         $collection3 = $collection1->zip($collection2);
 
         $this->assertEquals([
-            collect([1,4]),
-            collect([2,5]),
-            collect([3,6]),
+            collect([1, 4]),
+            collect([2, 5]),
+            collect([3, 6]),
         ], $collection3->all());
     }
 
     public function testConcat()
     {
-        $collection1 = collect([1,2,3]);
-        $collection2 = collect([4,5,6]);
+        $collection1 = collect([1, 2, 3]);
+        $collection2 = collect([4, 5, 6]);
         $collection3 = $collection1->concat($collection2);
 
-        $this->assertEqualsCanonicalizing([1,2,3,4,5,6], $collection3->all());
+        $this->assertEqualsCanonicalizing([1, 2, 3, 4, 5, 6], $collection3->all());
     }
 
     public function testCombine()
@@ -137,12 +137,12 @@ class CollectionTest extends TestCase
     public function testCollapse()
     {
         $collection = collect([
-            [1,2,3],
-            [4,5,6],
-            [7,8,9]
+            [1, 2, 3],
+            [4, 5, 6],
+            [7, 8, 9]
         ]);
         $result = $collection->collapse();
-        $this->assertEqualsCanonicalizing([1,2,3,4,5,6,7,8,9], $result->all());
+        $this->assertEqualsCanonicalizing([1, 2, 3, 4, 5, 6, 7, 8, 9], $result->all());
 
     }
 
@@ -158,7 +158,7 @@ class CollectionTest extends TestCase
                 "hobbies" => ["Reading", "Writing"]
             ],
         ]);
-        $result = $collection->flatMap(function ($item){
+        $result = $collection->flatMap(function ($item) {
             $hobbies = $item["hobbies"];
             return $hobbies;
         });
@@ -197,14 +197,15 @@ class CollectionTest extends TestCase
 
     public function testFilterIndex()
     {
-        $collection = collect([1,2,3,4,5,6,7,8,9,10]);
-        $result = $collection->filter(function ($value, $key){
+        $collection = collect([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+        $result = $collection->filter(function ($value, $key) {
             return $value % 2 == 0;
         });
 
-        $this->assertEqualsCanonicalizing([2,4,6,8,10], $result->all());
+        $this->assertEqualsCanonicalizing([2, 4, 6, 8, 10], $result->all());
 
     }
+
     public function testPartition()
     {
         $collection = collect([
@@ -231,7 +232,7 @@ class CollectionTest extends TestCase
     {
         $collection = collect(["Eko", "Kurniawan", "Khannedy"]);
         $this->assertTrue($collection->contains("Eko"));
-        $this->assertTrue($collection->contains(function ($value, $key){
+        $this->assertTrue($collection->contains(function ($value, $key) {
             return $value == "Khannedy";
         }));
     }
@@ -274,7 +275,7 @@ class CollectionTest extends TestCase
             ])
         ], $result->all());
 
-        $result = $collection->groupBy(function ($value, $key){
+        $result = $collection->groupBy(function ($value, $key) {
             return strtolower($value["department"]);
         });
 
@@ -296,6 +297,18 @@ class CollectionTest extends TestCase
                 ]
             ])
         ], $result->all());
+
+    }
+
+    public function testSlicing()
+    {
+        $collection = collect([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+        $result = $collection->slice(3);
+
+        $this->assertEqualsCanonicalizing([4, 5, 6, 7, 8, 9], $result->all());
+
+        $result = $collection->slice(3, 2);
+        $this->assertEqualsCanonicalizing([4, 5], $result->all());
 
     }
 
