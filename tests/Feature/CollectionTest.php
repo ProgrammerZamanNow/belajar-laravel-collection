@@ -6,6 +6,7 @@ use App\Data\Person;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use function PHPUnit\Framework\assertEquals;
 
 class CollectionTest extends TestCase
 {
@@ -233,6 +234,69 @@ class CollectionTest extends TestCase
         $this->assertTrue($collection->contains(function ($value, $key){
             return $value == "Khannedy";
         }));
+    }
+
+    public function testGrouping()
+    {
+        $collection = collect([
+            [
+                "name" => "Eko",
+                "department" => "IT"
+            ],
+            [
+                "name" => "Khannedy",
+                "department" => "IT"
+            ],
+            [
+                "name" => "Budi",
+                "department" => "HR"
+            ]
+        ]);
+
+        $result = $collection->groupBy("department");
+
+        assertEquals([
+            "IT" => collect([
+                [
+                    "name" => "Eko",
+                    "department" => "IT"
+                ],
+                [
+                    "name" => "Khannedy",
+                    "department" => "IT"
+                ]
+            ]),
+            "HR" => collect([
+                [
+                    "name" => "Budi",
+                    "department" => "HR"
+                ]
+            ])
+        ], $result->all());
+
+        $result = $collection->groupBy(function ($value, $key){
+            return strtolower($value["department"]);
+        });
+
+        assertEquals([
+            "it" => collect([
+                [
+                    "name" => "Eko",
+                    "department" => "IT"
+                ],
+                [
+                    "name" => "Khannedy",
+                    "department" => "IT"
+                ]
+            ]),
+            "hr" => collect([
+                [
+                    "name" => "Budi",
+                    "department" => "HR"
+                ]
+            ])
+        ], $result->all());
+
     }
 
 
