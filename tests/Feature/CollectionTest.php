@@ -337,12 +337,12 @@ class CollectionTest extends TestCase
         $result = $collection->skip(3);
         $this->assertEqualsCanonicalizing([4, 5, 6, 7, 8, 9], $result->all());
 
-        $result = $collection->skipUntil(function ($value, $key){
+        $result = $collection->skipUntil(function ($value, $key) {
             return $value == 3;
         });
         $this->assertEqualsCanonicalizing([3, 4, 5, 6, 7, 8, 9], $result->all());
 
-        $result = $collection->skipWhile(function ($value, $key){
+        $result = $collection->skipWhile(function ($value, $key) {
             return $value < 3;
         });
         $this->assertEqualsCanonicalizing([3, 4, 5, 6, 7, 8, 9], $result->all());
@@ -351,14 +351,40 @@ class CollectionTest extends TestCase
 
     public function testChunk()
     {
-        $collection = collect([1,2,3,4,5,6,7,8,9,10]);
+        $collection = collect([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 
         $result = $collection->chunk(3);
 
-        $this->assertEqualsCanonicalizing([1,2,3], $result->all()[0]->all());
-        $this->assertEqualsCanonicalizing([4,5,6], $result->all()[1]->all());
-        $this->assertEqualsCanonicalizing([7,8,9], $result->all()[2]->all());
+        $this->assertEqualsCanonicalizing([1, 2, 3], $result->all()[0]->all());
+        $this->assertEqualsCanonicalizing([4, 5, 6], $result->all()[1]->all());
+        $this->assertEqualsCanonicalizing([7, 8, 9], $result->all()[2]->all());
         $this->assertEqualsCanonicalizing([10], $result->all()[3]->all());
+    }
+
+    public function testFirst()
+    {
+        $collection = collect([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+        $result = $collection->first();
+        $this->assertEquals(1, $result);
+
+        $result = $collection->first(function ($value, $key) {
+            return $value > 5;
+        });
+        $this->assertEquals(6, $result);
+
+    }
+
+    public function testLast()
+    {
+
+        $collection = collect([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+        $result = $collection->last();
+        $this->assertEquals(9, $result);
+
+        $result = $collection->last(function ($value, $key) {
+            return $value < 5;
+        });
+        $this->assertEquals(4, $result);
     }
 
 
