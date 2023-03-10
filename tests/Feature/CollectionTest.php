@@ -423,5 +423,22 @@ class CollectionTest extends TestCase
 
     }
 
+    public function testAggregate()
+    {
+        $collection = collect([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+        $result = $collection->sum();
+        $this->assertEquals(45, $result);
+
+        $result = $collection->avg();
+        $this->assertEquals(5, $result);
+
+        $result = $collection->min();
+        $this->assertEquals(1, $result);
+
+        $result = $collection->max();
+        $this->assertEquals(9, $result);
+
+    }
+
 
 }
