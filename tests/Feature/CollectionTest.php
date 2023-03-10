@@ -406,9 +406,20 @@ class CollectionTest extends TestCase
         $this->assertFalse($collection->isEmpty());
         $this->assertTrue($collection->contains(1));
         $this->assertFalse($collection->contains(10));
-        $this->assertTrue($collection->contains(function ($value, $key){
+        $this->assertTrue($collection->contains(function ($value, $key) {
             return $value == 8;
         }));
+
+    }
+
+    public function testOrdering()
+    {
+        $collection = collect([1, 3, 2, 4, 6, 5, 8, 7, 9]);
+        $result = $collection->sort();
+        $this->assertEqualsCanonicalizing([1, 2, 3, 4, 5, 6, 7, 8, 9], $result->all());
+
+        $result = $collection->sortDesc();
+        $this->assertEqualsCanonicalizing([9, 8, 7, 6, 5, 4, 3, 2, 1], $result->all());
 
     }
 
